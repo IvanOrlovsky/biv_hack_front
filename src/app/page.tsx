@@ -91,7 +91,7 @@ export default function Home() {
 							} bg-yellow-200 rounded-lg shadow-lg transition-all duration-300 hover:bg-yellow-300 cursor-pointer relative overflow-hidden`}
 						>
 							{/* Язычок */}
-							<div className="text-yellow-300 absolute top-5 right-0 bg-yellow-300 text-sm text-yellow-800 py-1 px-2 rounded-bl-xl">
+							<div className="text-yellow-300 absolute top-5 right-0 bg-yellow-300 text-sm py-1 px-2 rounded-bl-xl">
 								use client
 							</div>
 
