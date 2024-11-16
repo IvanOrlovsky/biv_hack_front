@@ -28,6 +28,7 @@ export default function Home() {
 		{ id: "4", name: "Продукт 4", description: "Описание продукта 4" },
 		{ id: "5", name: "Продукт 5", description: "Описание продукта 5" },
 		{ id: "6", name: "Продукт 6", description: "Описание продукта 6" },
+		{ id: "7", name: "Продукт 7", description: "Описание продукта 7" },
 	]);
 
 	const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -55,8 +56,8 @@ export default function Home() {
 	};
 
 	return (
-		<div className="min-h-screen bg-gray-100 p-8">
-			<div className="relative max-w-6xl mx-auto ">
+		<div className="min-h-screen bg-gray-200 p-8 flex justify-center items-center">
+			<div className="grow relative max-w-6xl h-[500px] mx-auto overflow-y-auto px-8 bg-gradient-to-b from-gray-400 to-gray-300 py-10 border-solid border-gray-600 border-[6px]">
 				{products.map((product, index) => (
 					<motion.div
 						key={product.id}
@@ -90,7 +91,7 @@ export default function Home() {
 							} bg-yellow-200 rounded-lg shadow-lg transition-all duration-300 hover:bg-yellow-300 cursor-pointer relative overflow-hidden`}
 						>
 							{/* Язычок */}
-							<div className="absolute top-0 right-0 bg-yellow-300 text-sm text-yellow-800 py-1 px-2 rounded-bl-xl">
+							<div className="text-transparent absolute top-5 right-0 bg-yellow-300 text-sm text-yellow-800 py-1 px-2 rounded-bl-xl">
 								use client
 							</div>
 
