@@ -1,101 +1,248 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogDescription,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Folder, Edit, Trash2, ExternalLink } from "lucide-react";
+
+interface Product {
+	id: string;
+	name: string;
+	description: string;
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+	const [products, setProducts] = useState<Product[]>([
+		{ id: "1", name: "Продукт 1", description: "Описание продукта 1" },
+		{ id: "2", name: "Продукт 2", description: "Описание продукта 2" },
+		{ id: "3", name: "Продукт 3", description: "Описание продукта 3" },
+		{ id: "4", name: "Продукт 4", description: "Описание продукта 4" },
+		{ id: "5", name: "Продукт 5", description: "Описание продукта 5" },
+		{ id: "6", name: "Продукт 6", description: "Описание продукта 6" },
+	]);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+	const [selectedId, setSelectedId] = useState<string | null>(null);
+	const [modalIsOpen, setModalIsOpen] = useState(false);
+	const [modalType, setModalType] = useState<"edit" | "delete" | null>(null);
+	const [selectedProduct, setSelectedProduct] = useState<Product | null>(
+		null
+	);
+
+	const handleOpenModal = (
+		type: "edit" | "delete",
+		product: Product,
+		e: React.MouseEvent
+	) => {
+		e.stopPropagation();
+		setModalType(type);
+		setSelectedProduct(product);
+		setModalIsOpen(true);
+	};
+
+	const handleCloseModal = () => {
+		setModalIsOpen(false);
+		setModalType(null);
+		setSelectedProduct(null);
+	};
+
+	return (
+		<div className="min-h-screen bg-gray-100 p-8">
+			<div className="relative max-w-6xl mx-auto ">
+				{products.map((product, index) => (
+					<motion.div
+						key={product.id}
+						layoutId={product.id}
+						className="relative"
+						initial={{
+							y: index * 10, // Смещение по оси Y для каждой папки
+						}}
+						animate={{
+							y: selectedId === product.id ? -20 : index * 10,
+							scale: selectedId === product.id ? 1.02 : 1,
+						}}
+						transition={{
+							type: "spring",
+							stiffness: 300,
+							damping: 30,
+						}}
+						style={{
+							zIndex: product.id === selectedId ? 10 : index,
+						}}
+						onClick={() =>
+							setSelectedId(
+								selectedId === product.id ? null : product.id
+							)
+						}
+					>
+						{/* Папка */}
+						<div
+							className={`w-full ${
+								selectedId === product.id ? "h-64" : "h-24"
+							} bg-yellow-200 rounded-lg shadow-lg transition-all duration-300 hover:bg-yellow-300 cursor-pointer relative overflow-hidden`}
+						>
+							{/* Язычок */}
+							<div className="absolute top-0 right-0 bg-yellow-300 text-sm text-yellow-800 py-1 px-2 rounded-bl-xl">
+								use client
+							</div>
+
+							{/* Верхняя часть папки */}
+							<div className="absolute top-0 left-0 right-0 h-8 bg-yellow-300 rounded-t-lg" />
+
+							{/* Содержимое папки */}
+							<div className="relative p-4 pt-10">
+								<div className="flex items-center gap-2">
+									<Folder className="w-6 h-6 text-yellow-600" />
+									<h2 className="text-xl font-bold text-yellow-800">
+										{product.name}
+									</h2>
+								</div>
+
+								<AnimatePresence>
+									{selectedId === product.id && (
+										<motion.div
+											initial={{ opacity: 0, height: 0 }}
+											animate={{
+												opacity: 1,
+												height: "auto",
+											}}
+											exit={{ opacity: 0, height: 0 }}
+											className="mt-4 space-y-4"
+										>
+											<p className="text-yellow-900">
+												{product.description}
+											</p>
+
+											<div className="flex gap-2">
+												<Button
+													variant="outline"
+													className="bg-white hover:bg-yellow-50"
+													onClick={(e) => {
+														e.stopPropagation();
+														window.location.href = `/product/${product.id}/info`;
+													}}
+												>
+													<ExternalLink className="w-4 h-4 mr-2" />
+													Изучить
+												</Button>
+												<Button
+													variant="outline"
+													className="bg-white hover:bg-green-50"
+													onClick={(e) =>
+														handleOpenModal(
+															"edit",
+															product,
+															e
+														)
+													}
+												>
+													<Edit className="w-4 h-4 mr-2" />
+													Редактировать
+												</Button>
+												<Button
+													variant="outline"
+													className="bg-white hover:bg-red-50"
+													onClick={(e) =>
+														handleOpenModal(
+															"delete",
+															product,
+															e
+														)
+													}
+												>
+													<Trash2 className="w-4 h-4 mr-2" />
+													Удалить
+												</Button>
+											</div>
+										</motion.div>
+									)}
+								</AnimatePresence>
+							</div>
+						</div>
+					</motion.div>
+				))}
+			</div>
+
+			{/* Модальные окна */}
+			<Dialog
+				open={modalIsOpen}
+				onOpenChange={(open) => !open && handleCloseModal()}
+			>
+				<DialogContent className="sm:max-w-md">
+					{modalType === "edit" ? (
+						<div className="space-y-4">
+							<DialogHeader>
+								<DialogTitle>Редактировать продукт</DialogTitle>
+							</DialogHeader>
+							<div className="space-y-4">
+								<div>
+									<label className="text-sm font-medium">
+										Название
+									</label>
+									<Input
+										defaultValue={selectedProduct?.name}
+										className="mt-1"
+									/>
+								</div>
+								<div>
+									<label className="text-sm font-medium">
+										Описание
+									</label>
+									<Textarea
+										defaultValue={
+											selectedProduct?.description
+										}
+										className="mt-1"
+									/>
+								</div>
+							</div>
+							<div className="flex justify-end gap-2">
+								<Button
+									variant="outline"
+									onClick={handleCloseModal}
+								>
+									Отмена
+								</Button>
+								<Button onClick={handleCloseModal}>
+									Сохранить
+								</Button>
+							</div>
+						</div>
+					) : (
+						<div className="space-y-4">
+							<DialogHeader>
+								<DialogTitle>Удалить продукт?</DialogTitle>
+								<DialogDescription>
+									Вы действительно хотите удалить продукт "
+									{selectedProduct?.name}"?
+								</DialogDescription>
+							</DialogHeader>
+							<div className="flex justify-end gap-2">
+								<Button
+									variant="outline"
+									onClick={handleCloseModal}
+								>
+									Отмена
+								</Button>
+								<Button
+									variant="destructive"
+									onClick={handleCloseModal}
+								>
+									Удалить
+								</Button>
+							</div>
+						</div>
+					)}
+				</DialogContent>
+			</Dialog>
+		</div>
+	);
 }

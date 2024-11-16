@@ -2,20 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.75);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-@media (prefers-color-scheme: dark) {
+.modal-content {
+	background: white;
+	border-radius: 8px;
+	padding: 2rem;
+	max-width: 500px;
+	width: 100%;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+		--radius: 0.5rem;
+	}
 }
