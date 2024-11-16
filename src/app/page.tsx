@@ -128,7 +128,7 @@ export default function Home() {
 													className="bg-white hover:bg-yellow-50"
 													onClick={(e) => {
 														e.stopPropagation();
-														window.location.href = `/product/${product.id}/info`;
+														window.location.href = `/product/${product.id}/structure`;
 													}}
 												>
 													<ExternalLink className="w-4 h-4 mr-2" />
